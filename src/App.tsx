@@ -35,6 +35,7 @@ function Calculator() {
   ]);
   const [theme, setTheme] = useState<ThemeConfig>({ darkMode: true });
   const [isCalculated, setIsCalculated] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Initialize with all model IDs to show all models by default
   const [selectedModelIds, setSelectedModelIds] = useState<string[]>(
@@ -315,29 +316,71 @@ function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#13111C] flex">
-      {/* Sidebar */}
-      <Sidebar
+    <div className="min-h-screen bg-[#13111C]">
+      {/* Header */}
+      <Header
         darkMode={theme.darkMode}
-        activeSection={activeSection}
-        onSectionChange={setActiveSection}
+        onThemeToggle={handleThemeToggle}
+        currentSection={activeSection}
+        providers={selectedProviders as unknown as string[]}
+        onQuickCalculate={handleCalculate}
+        isSidebarOpen={isSidebarOpen}
+        onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
-      {/* Main Content */}
-      <div className="flex-1 ml-64">
-        {/* Header */}
-        <Header
-          darkMode={theme.darkMode}
-          onThemeToggle={handleThemeToggle}
-          currentSection={activeSection}
-          providers={selectedProviders as unknown as string[]}
-          onQuickCalculate={handleCalculate}
-        />
+      {/* Main Content Area with Sidebar */}
+      <div className="pt-16 flex">
+        {/* Sidebar */}
+        <motion.div
+          initial={false}
+          animate={{
+            width: isSidebarOpen ? "256px" : "0px",
+            opacity: isSidebarOpen ? 1 : 0,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+          className={`fixed left-0 top-16 h-[calc(100vh-64px)] bg-[#13111C] border-r ${
+            theme.darkMode ? "border-[#2D2B3B]" : "border-gray-200"
+          } overflow-hidden`}
+        >
+          <Sidebar
+            darkMode={theme.darkMode}
+            activeSection={activeSection}
+            onSectionChange={setActiveSection}
+          />
+        </motion.div>
 
-        {/* Main Content Area */}
-        <main className="p-8">
-          <div className="max-w-7xl mx-auto">{renderContent()}</div>
-        </main>
+        {/* Main Content */}
+        <motion.div
+          className="flex-1 min-w-0 transition-all duration-300"
+          animate={{
+            marginLeft: isSidebarOpen ? "256px" : "0px",
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+        >
+          <main className="p-8">
+            <div className="max-w-7xl mx-auto">{renderContent()}</div>
+          </main>
+        </motion.div>
+
+        {/* Mobile Overlay */}
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/20 z-20 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
       </div>
     </div>
   );
