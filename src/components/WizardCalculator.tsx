@@ -161,42 +161,46 @@ export default function WizardCalculator({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className={`p-6 rounded-xl ${
+        className={`p-8 rounded-2xl ${
           darkMode ? "bg-[#1E1B2E]" : "bg-white"
-        } shadow-md`}
+        } shadow-xl`}
       >
         <h2
-          className={`text-xl font-semibold mb-4 ${
+          className={`text-2xl font-semibold mb-3 ${
             darkMode ? "text-white" : "text-gray-900"
           }`}
         >
           Configure Input and Output Parameters
         </h2>
-        <p className={`mb-6 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+        <p className={`mb-8 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
           Set the size of your prompt and expected response.
         </p>
 
-        <div className="mb-6">
-          <label className="block text-gray-300 text-sm mb-3 flex items-center">
+        <div className="mb-8">
+          <label className="block text-gray-400 text-sm font-medium mb-3">
             Calculate by
           </label>
-          <div className="flex space-x-2">
+          <div className="flex space-x-3">
             <button
               onClick={() => onParamsChange({ ...params, useTokens: true })}
-              className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 params.useTokens
-                  ? "bg-[#8B5CF6] text-white"
-                  : "bg-[#1E1B2E] text-gray-400 hover:text-white"
+                  ? "bg-[#8B5CF6] text-white shadow-lg shadow-purple-500/25"
+                  : darkMode
+                  ? "bg-[#292538] text-gray-400 hover:bg-[#332E44] hover:text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Tokens
             </button>
             <button
               onClick={() => onParamsChange({ ...params, useTokens: false })}
-              className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 !params.useTokens
-                  ? "bg-[#8B5CF6] text-white"
-                  : "bg-[#1E1B2E] text-gray-400 hover:text-white"
+                  ? "bg-[#8B5CF6] text-white shadow-lg shadow-purple-500/25"
+                  : darkMode
+                  ? "bg-[#292538] text-gray-400 hover:bg-[#332E44] hover:text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Words
@@ -204,33 +208,44 @@ export default function WizardCalculator({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-8">
           <div>
             <label
-              className={`block text-sm mb-2 ${
+              className={`block text-sm font-medium mb-2 ${
                 darkMode ? "text-gray-300" : "text-gray-700"
               }`}
             >
               {params.useTokens ? "Input Tokens" : "Input Words"}
             </label>
-            <input
-              type="number"
-              value={params.inputSize}
-              onChange={(e) =>
-                onParamsChange({
-                  ...params,
-                  inputSize: parseInt(e.target.value) || 0,
-                })
-              }
-              className={`w-full px-4 py-3 rounded-lg ${
-                darkMode
-                  ? "bg-[#292538] text-white border-0 focus:ring-2 focus:ring-[#8B5CF6]"
-                  : "bg-gray-100 text-gray-900 border-gray-300 focus:ring-[#8B5CF6]"
-              }`}
-              placeholder="1000"
-            />
+            <div className="relative">
+              <input
+                type="number"
+                value={params.inputSize}
+                onChange={(e) =>
+                  onParamsChange({
+                    ...params,
+                    inputSize: parseInt(e.target.value) || 0,
+                  })
+                }
+                className={`w-full px-4 py-3 rounded-xl text-lg transition-all duration-200 ${
+                  darkMode
+                    ? "bg-[#292538] text-white border-0 focus:ring-2 focus:ring-[#8B5CF6] focus:bg-[#332E44]"
+                    : "bg-gray-100 text-gray-900 border-gray-300 focus:ring-[#8B5CF6]"
+                }`}
+                placeholder="1000"
+              />
+              <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                <span
+                  className={`text-sm ${
+                    darkMode ? "text-gray-500" : "text-gray-600"
+                  }`}
+                >
+                  tokens
+                </span>
+              </div>
+            </div>
             <p
-              className={`mt-1 text-xs ${
+              className={`mt-2 text-xs ${
                 darkMode ? "text-gray-500" : "text-gray-600"
               }`}
             >
@@ -242,30 +257,41 @@ export default function WizardCalculator({
 
           <div>
             <label
-              className={`block text-sm mb-2 ${
+              className={`block text-sm font-medium mb-2 ${
                 darkMode ? "text-gray-300" : "text-gray-700"
               }`}
             >
               {params.useTokens ? "Output Tokens" : "Output Words"}
             </label>
-            <input
-              type="number"
-              value={params.outputSize}
-              onChange={(e) =>
-                onParamsChange({
-                  ...params,
-                  outputSize: parseInt(e.target.value) || 0,
-                })
-              }
-              className={`w-full px-4 py-3 rounded-lg ${
-                darkMode
-                  ? "bg-[#292538] text-white border-0 focus:ring-2 focus:ring-[#8B5CF6]"
-                  : "bg-gray-100 text-gray-900 border-gray-300 focus:ring-[#8B5CF6]"
-              }`}
-              placeholder="1000"
-            />
+            <div className="relative">
+              <input
+                type="number"
+                value={params.outputSize}
+                onChange={(e) =>
+                  onParamsChange({
+                    ...params,
+                    outputSize: parseInt(e.target.value) || 0,
+                  })
+                }
+                className={`w-full px-4 py-3 rounded-xl text-lg transition-all duration-200 ${
+                  darkMode
+                    ? "bg-[#292538] text-white border-0 focus:ring-2 focus:ring-[#8B5CF6] focus:bg-[#332E44]"
+                    : "bg-gray-100 text-gray-900 border-gray-300 focus:ring-[#8B5CF6]"
+                }`}
+                placeholder="500"
+              />
+              <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                <span
+                  className={`text-sm ${
+                    darkMode ? "text-gray-500" : "text-gray-600"
+                  }`}
+                >
+                  tokens
+                </span>
+              </div>
+            </div>
             <p
-              className={`mt-1 text-xs ${
+              className={`mt-2 text-xs ${
                 darkMode ? "text-gray-500" : "text-gray-600"
               }`}
             >
@@ -591,11 +617,9 @@ export default function WizardCalculator({
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto pb-8">
       {renderStepIndicator()}
-
       {renderCurrentStep()}
-
       <div className="flex justify-between mt-8">
         <button
           onClick={prevStep}

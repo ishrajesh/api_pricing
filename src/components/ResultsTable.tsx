@@ -28,14 +28,22 @@ export default function ResultsTable({
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [modelsPerPage, setModelsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Get models for selected providers
   const models = selectedProviders.flatMap((provider) =>
     getModelsByProvider(provider)
   );
 
+  // Filter models based on search query
+  const filteredModels = models.filter(
+    (model) =>
+      model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      model.provider.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Calculate costs based on params
-  const modelsWithCosts = models.map((model) => {
+  const modelsWithCosts = filteredModels.map((model) => {
     const costs = calculateCosts({
       inputSize: params.inputSize,
       outputSize: params.outputSize,
@@ -171,27 +179,61 @@ export default function ResultsTable({
             Showing {currentModels.length} of {sortedModels.length} models
           </p>
         </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={handleSelectAll}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg ${
-              darkMode
-                ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Select All
-          </button>
-          <button
-            onClick={handleDeselectAll}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg ${
-              darkMode
-                ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Deselect All
-          </button>
+        <div className="flex items-center space-x-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by model or provider..."
+              className={`w-64 px-4 py-1.5 pr-8 text-sm rounded-lg transition-colors ${
+                darkMode
+                  ? "bg-gray-700 text-white placeholder-gray-400 border-gray-600 focus:border-purple-500"
+                  : "bg-white text-gray-900 placeholder-gray-500 border-gray-300 focus:border-purple-500"
+              } border focus:outline-none focus:ring-1 focus:ring-purple-500`}
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg
+                className={`w-4 h-4 ${
+                  darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          </div>
+          {/* Select/Deselect Buttons */}
+          <div className="flex space-x-2">
+            <button
+              onClick={handleSelectAll}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg ${
+                darkMode
+                  ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Select All
+            </button>
+            <button
+              onClick={handleDeselectAll}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg ${
+                darkMode
+                  ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Deselect All
+            </button>
+          </div>
         </div>
       </div>
       <div className="overflow-x-auto">

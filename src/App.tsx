@@ -59,8 +59,8 @@ function Calculator() {
     switch (activeSection) {
       case "calculator":
         return (
-          <>
-            <div className="text-center mb-16">
+          <div className="h-[calc(100vh-180px)] flex flex-col">
+            <div className="text-center mb-8 pt-16">
               <h1 className="text-6xl font-bold mb-6 text-white">
                 LLM API Pricing Calculator
               </h1>
@@ -78,7 +78,7 @@ function Calculator() {
               darkMode={theme.darkMode}
               onSubmit={handleCalculate}
             />
-          </>
+          </div>
         );
       case "results":
         const resultsTabs = [
@@ -316,46 +316,49 @@ function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#13111C]">
+    <div className="min-h-screen bg-[#13111C] flex flex-col">
       {/* Header */}
       <Header
         darkMode={theme.darkMode}
-        onThemeToggle={handleThemeToggle}
         currentSection={activeSection}
-        providers={selectedProviders as unknown as string[]}
         onQuickCalculate={handleCalculate}
         isSidebarOpen={isSidebarOpen}
         onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+        onSectionChange={setActiveSection}
       />
 
       {/* Main Content Area with Sidebar */}
-      <div className="pt-16 flex">
-        {/* Sidebar */}
+      <div className="flex flex-1 relative">
+        {/* Sidebar - Animate width and position */}
         <motion.div
           initial={false}
           animate={{
             width: isSidebarOpen ? "256px" : "0px",
-            opacity: isSidebarOpen ? 1 : 0,
+            x: isSidebarOpen ? 0 : -256,
           }}
           transition={{
             type: "spring",
             stiffness: 300,
             damping: 30,
           }}
-          className={`fixed left-0 top-16 h-[calc(100vh-64px)] bg-[#13111C] border-r ${
-            theme.darkMode ? "border-[#2D2B3B]" : "border-gray-200"
-          } overflow-hidden`}
+          className="fixed top-[64px] left-0 h-[calc(100vh-64px)] bg-[#13111C] z-30"
         >
-          <Sidebar
-            darkMode={theme.darkMode}
-            activeSection={activeSection}
-            onSectionChange={setActiveSection}
-          />
+          <div
+            className={`h-full overflow-hidden ${
+              isSidebarOpen ? "border-r border-gray-700/50" : ""
+            }`}
+          >
+            <Sidebar
+              darkMode={theme.darkMode}
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
+            />
+          </div>
         </motion.div>
 
         {/* Main Content */}
         <motion.div
-          className="flex-1 min-w-0 transition-all duration-300"
+          className="flex-1 min-w-0"
           animate={{
             marginLeft: isSidebarOpen ? "256px" : "0px",
           }}
@@ -370,7 +373,7 @@ function Calculator() {
           </main>
         </motion.div>
 
-        {/* Mobile Overlay */}
+        {/* Overlay when sidebar is open on mobile */}
         {isSidebarOpen && (
           <motion.div
             initial={{ opacity: 0 }}

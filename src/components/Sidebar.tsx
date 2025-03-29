@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -8,8 +7,6 @@ import {
   FileText,
   HelpCircle,
   Settings,
-  ChevronLeft,
-  ChevronRight,
   Save,
   History,
 } from "lucide-react";
@@ -25,8 +22,6 @@ export default function Sidebar({
   activeSection,
   onSectionChange,
 }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false);
-
   const navItems = [
     { id: "calculator", label: "Calculator", icon: Calculator },
     { id: "results", label: "Results & Visualization", icon: BarChart },
@@ -42,34 +37,34 @@ export default function Sidebar({
   ];
 
   return (
-    <motion.div
-      initial={{ x: 0 }}
-      animate={{ x: collapsed ? -240 : 0 }}
-      transition={{ duration: 0.3 }}
-      className={`fixed left-0 top-0 h-screen ${collapsed ? "w-16" : "w-64"} ${
+    <div
+      className={`h-full ${
         darkMode ? "bg-[#1E1B2E] text-white" : "bg-gray-100 text-gray-800"
-      } shadow-lg flex flex-col z-40`}
+      } flex flex-col`}
     >
-      {/* Collapse toggle button */}
-      <motion.button
-        onClick={() => setCollapsed(!collapsed)}
-        className={`absolute -right-4 top-20 p-2 rounded-full shadow-md ${
-          darkMode ? "bg-[#1E1B2E] text-white" : "bg-white text-gray-800"
-        }`}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-      </motion.button>
-
       {/* Logo area */}
       <div
         className={`p-4 border-b ${
           darkMode ? "border-gray-700" : "border-gray-200"
-        } ${collapsed ? "justify-center" : "justify-start"} flex items-center`}
+        } flex items-center`}
       >
-        {!collapsed && <h1 className="font-bold text-xl ml-2">ModelMetrics</h1>}
-        {collapsed && <Calculator className="h-6 w-6" />}
+        <div className="flex items-center text-sm">
+          <span className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+            Home
+          </span>
+          <span
+            className={`mx-2 ${darkMode ? "text-gray-600" : "text-gray-400"}`}
+          >
+            /
+          </span>
+          <span
+            className={`${
+              darkMode ? "text-white" : "text-gray-900"
+            } capitalize`}
+          >
+            {activeSection}
+          </span>
+        </div>
       </div>
 
       {/* Main navigation */}
@@ -89,12 +84,12 @@ export default function Sidebar({
                       : darkMode
                       ? "text-gray-300 hover:bg-gray-700/30 hover:text-white"
                       : "text-gray-700 hover:bg-gray-200 hover:text-black"
-                  } ${collapsed ? "justify-center" : "justify-start"}`}
+                  }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Icon className="h-5 w-5" />
-                  {!collapsed && <span className="ml-3">{item.label}</span>}
+                  <span className="ml-3">{item.label}</span>
                 </motion.button>
               </li>
             );
@@ -103,38 +98,36 @@ export default function Sidebar({
       </div>
 
       {/* Quick actions */}
-      {!collapsed && (
-        <div
-          className={`p-4 border-t ${
-            darkMode ? "border-gray-700" : "border-gray-200"
-          }`}
-        >
-          <h3 className="text-sm font-medium mb-3 text-gray-400">
-            Quick Actions
-          </h3>
-          <ul className="space-y-2">
-            {quickActions.map((action) => {
-              const Icon = action.icon;
-              return (
-                <li key={action.id}>
-                  <motion.button
-                    className={`w-full flex items-center px-3 py-2 rounded-md transition-colors ${
-                      darkMode
-                        ? "text-gray-300 hover:bg-gray-700/30 hover:text-white"
-                        : "text-gray-700 hover:bg-gray-200 hover:text-black"
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span className="ml-3 text-sm">{action.label}</span>
-                  </motion.button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
-    </motion.div>
+      <div
+        className={`p-4 border-t ${
+          darkMode ? "border-gray-700" : "border-gray-200"
+        }`}
+      >
+        <h3 className="text-sm font-medium mb-3 text-gray-400">
+          Quick Actions
+        </h3>
+        <ul className="space-y-2">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
+            return (
+              <li key={action.id}>
+                <motion.button
+                  className={`w-full flex items-center px-3 py-2 rounded-md transition-colors ${
+                    darkMode
+                      ? "text-gray-300 hover:bg-gray-700/30 hover:text-white"
+                      : "text-gray-700 hover:bg-gray-200 hover:text-black"
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="ml-3 text-sm">{action.label}</span>
+                </motion.button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }

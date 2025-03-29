@@ -456,12 +456,41 @@ export default function CostVisualization({
           darkMode ? "bg-gray-900/30" : "bg-gray-50"
         }`}
       >
-        {activeChart === "bar" && <Bar data={barData} options={barOptions} />}
-        {activeChart === "radar" && (
-          <Radar data={radarData} options={radarOptions} />
-        )}
-        {activeChart === "scatter" && (
-          <Scatter data={scatterData} options={scatterOptions} />
+        {models.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-center">
+            <BarChart3
+              className={`w-12 h-12 mb-4 ${
+                darkMode ? "text-gray-600" : "text-gray-400"
+              }`}
+            />
+            <h3
+              className={`text-lg font-medium mb-2 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              No Models Selected
+            </h3>
+            <p
+              className={`text-sm ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              } max-w-md`}
+            >
+              Please select at least one model from the comparison table to view
+              cost visualizations.
+            </p>
+          </div>
+        ) : (
+          <>
+            {activeChart === "bar" && (
+              <Bar data={barData} options={barOptions} />
+            )}
+            {activeChart === "radar" && (
+              <Radar data={radarData} options={radarOptions} />
+            )}
+            {activeChart === "scatter" && (
+              <Scatter data={scatterData} options={scatterOptions} />
+            )}
+          </>
         )}
       </div>
 

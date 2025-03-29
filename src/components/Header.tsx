@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  MoonIcon,
-  SunIcon,
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
   BellIcon,
-  ChevronDownIcon,
   Bars3Icon,
 } from "@heroicons/react/20/solid";
 import { Calculator, Zap, Share2 } from "lucide-react";
@@ -15,43 +12,25 @@ import { Link } from "react-router-dom";
 
 interface HeaderProps {
   darkMode: boolean;
-  onThemeToggle: () => void;
   currentSection: string;
-  providers: string[];
   onQuickCalculate: () => void;
   isSidebarOpen: boolean;
   onSidebarToggle: () => void;
+  onSectionChange: (section: string) => void;
 }
 
 export default function Header({
   darkMode,
-  onThemeToggle,
   currentSection,
-  providers = [],
   onQuickCalculate,
   isSidebarOpen,
   onSidebarToggle,
+  onSectionChange,
 }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Generate breadcrumb path based on current section
-  const getBreadcrumb = () => {
-    switch (currentSection) {
-      case "calculator":
-        return "Home / Calculator";
-      case "results":
-        return "Home / Results & Visualization";
-      case "models":
-        return "Home / Model Comparison";
-      case "docs":
-        return "Home / Documentation";
-      case "faq":
-        return "Home / FAQ";
-      case "settings":
-        return "Home / Settings";
-      default:
-        return "Home";
-    }
+  const handleModelMetricsClick = () => {
+    onSectionChange("calculator");
   };
 
   return (
@@ -65,7 +44,7 @@ export default function Header({
     >
       <div className="h-full px-4">
         <div className="flex items-center justify-between h-full max-w-[1920px] mx-auto">
-          {/* Left Section: Toggle, Brand and Breadcrumb */}
+          {/* Left Section: Toggle and Brand */}
           <div className="flex items-center space-x-4">
             <motion.button
               onClick={onSidebarToggle}
@@ -83,8 +62,10 @@ export default function Header({
 
             <Link
               to="/"
+              onClick={handleModelMetricsClick}
               className="flex items-center space-x-2 transition-opacity duration-200 hover:opacity-80"
             >
+              <Calculator className="h-6 w-6 text-[#8B5CF6]" />
               <span
                 className={`text-lg font-semibold ${
                   darkMode ? "text-white" : "text-gray-900"
@@ -93,14 +74,6 @@ export default function Header({
                 ModelMetrics
               </span>
             </Link>
-
-            <div
-              className={`text-sm ${
-                darkMode ? "text-gray-400" : "text-gray-500"
-              }`}
-            >
-              {getBreadcrumb()}
-            </div>
           </div>
 
           {/* Center Section: Search */}
@@ -140,39 +113,8 @@ export default function Header({
               Quick Calculate
             </motion.button>
 
-            {/* Provider Dropdown */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                darkMode
-                  ? "bg-[#1E1B2E] text-gray-200 hover:bg-gray-800"
-                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-              }`}
-            >
-              Providers
-              <ChevronDownIcon className="h-4 w-4 ml-1" />
-            </motion.button>
-
             {/* Theme and Actions */}
             <div className="flex items-center pl-2 space-x-2">
-              <motion.button
-                onClick={onThemeToggle}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className={`p-2 rounded-lg transition-colors ${
-                  darkMode
-                    ? "hover:bg-gray-800 text-gray-400 hover:text-white"
-                    : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                {darkMode ? (
-                  <SunIcon className="h-5 w-5" />
-                ) : (
-                  <MoonIcon className="h-5 w-5" />
-                )}
-              </motion.button>
-
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
