@@ -59,15 +59,18 @@ function Calculator() {
     switch (activeSection) {
       case "calculator":
         return (
-          <div className="h-[calc(100vh-180px)] flex flex-col">
-            <div className="text-center mb-8 pt-16">
-              <h1 className="text-6xl font-bold mb-6 text-white">
+          <div className="min-h-[calc(100vh-180px)] flex flex-col">
+            <div className="text-center mb-16 pt-8">
+              <h1 className="text-6xl md:text-7xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 LLM API Pricing Calculator
               </h1>
-              <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              <p className="text-lg md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
                 Calculate and compare the cost of using OpenAI, Anthropic, Groq,
                 and other LLM APIs for your AI project with our simple and
-                powerful calculator. Latest numbers as of March 2024.
+                powerful calculator.{" "}
+                <span className="text-purple-400">
+                  Latest numbers as of March 2024.
+                </span>
               </p>
             </div>
             <WizardCalculator
@@ -87,8 +90,8 @@ function Calculator() {
           "Features & Capabilities",
         ];
         return (
-          <>
-            <h1 className="text-3xl font-bold mb-6 text-white">
+          <div className="space-y-8">
+            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
               Results & Analysis
             </h1>
             <TabNavigation
@@ -129,7 +132,7 @@ function Calculator() {
                 isCalculated={isCalculated}
               />
             )}
-          </>
+          </div>
         );
       case "models":
         const modelTabs = [
@@ -138,8 +141,8 @@ function Calculator() {
           "Cost Breakdown",
         ];
         return (
-          <>
-            <h1 className="text-3xl font-bold mb-6 text-white">
+          <div className="space-y-8">
+            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
               Model Comparison
             </h1>
             <TabNavigation
@@ -149,15 +152,17 @@ function Calculator() {
               darkMode={theme.darkMode}
             />
             {activeTab === 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {getAllModels()
                   .filter((model) => selectedProviders.includes(model.provider))
                   .map((model) => (
                     <div
                       key={model.id}
                       className={`p-6 rounded-xl ${
-                        theme.darkMode ? "bg-[#1E1B2E]" : "bg-white"
-                      } shadow-md`}
+                        theme.darkMode
+                          ? "bg-[#1E1B2E]/80 backdrop-blur-sm border border-purple-500/10"
+                          : "bg-white"
+                      } shadow-lg hover:shadow-xl transition-all duration-300`}
                     >
                       <h3
                         className={`text-xl font-semibold mb-2 ${
@@ -202,7 +207,7 @@ function Calculator() {
               <ModelFeatureMatrix darkMode={theme.darkMode} />
             )}
             {activeTab === 2 && <CostBreakdown darkMode={theme.darkMode} />}
-          </>
+          </div>
         );
       case "docs":
         return <Documentation darkMode={theme.darkMode} />;
@@ -316,74 +321,20 @@ function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#13111C] flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#13111C] to-[#1A1825] flex flex-col">
       {/* Header */}
       <Header
         darkMode={theme.darkMode}
         currentSection={activeSection}
         onQuickCalculate={handleCalculate}
-        isSidebarOpen={isSidebarOpen}
-        onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         onSectionChange={setActiveSection}
       />
 
-      {/* Main Content Area with Sidebar */}
-      <div className="flex flex-1 relative">
-        {/* Sidebar - Animate width and position */}
-        <motion.div
-          initial={false}
-          animate={{
-            width: isSidebarOpen ? "256px" : "0px",
-            x: isSidebarOpen ? 0 : -256,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 30,
-          }}
-          className="fixed top-[64px] left-0 h-[calc(100vh-64px)] bg-[#13111C] z-30"
-        >
-          <div
-            className={`h-full overflow-hidden ${
-              isSidebarOpen ? "border-r border-gray-700/50" : ""
-            }`}
-          >
-            <Sidebar
-              darkMode={theme.darkMode}
-              activeSection={activeSection}
-              onSectionChange={setActiveSection}
-            />
-          </div>
-        </motion.div>
-
-        {/* Main Content */}
-        <motion.div
-          className="flex-1 min-w-0"
-          animate={{
-            marginLeft: isSidebarOpen ? "256px" : "0px",
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 30,
-          }}
-        >
-          <main className="p-8">
-            <div className="max-w-7xl mx-auto">{renderContent()}</div>
-          </main>
-        </motion.div>
-
-        {/* Overlay when sidebar is open on mobile */}
-        {isSidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/20 z-20 lg:hidden"
-            onClick={() => setIsSidebarOpen(false)}
-          />
-        )}
+      {/* Main Content Area */}
+      <div className="flex-1 pt-[calc(64px+48px)]">
+        <main className="px-6 sm:px-8 md:px-12 lg:px-16">
+          <div className="max-w-[1920px] mx-auto">{renderContent()}</div>
+        </main>
       </div>
     </div>
   );
