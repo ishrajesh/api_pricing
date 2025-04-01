@@ -4,11 +4,16 @@
 
 @layer base {
   html {
+    @apply bg-[#1A1825];
     font-family: "Inter", system-ui, sans-serif;
   }
 
   body {
-    @apply antialiased bg-background text-white;
+    @apply bg-[#1A1825] min-h-screen;
+  }
+
+  #root {
+    @apply min-h-screen flex flex-col;
   }
 
   input[type="number"] {

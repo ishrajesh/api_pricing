@@ -131,11 +131,12 @@ export default function CostVisualization({
         titleFont: {
           family: "Inter",
           size: 14,
-          weight: "600",
+          weight: 700,
         },
         bodyFont: {
           family: "Inter",
           size: 13,
+          weight: 400,
         },
         callbacks: {
           label: function (context: any) {
@@ -258,7 +259,7 @@ export default function CostVisualization({
           font: {
             family: "Inter",
             size: 12,
-            weight: "500",
+            weight: 500,
           },
         },
         grid: {
@@ -321,7 +322,7 @@ export default function CostVisualization({
           font: {
             family: "Inter",
             size: 11,
-            weight: "500",
+            weight: 500,
           },
         },
       },
@@ -340,7 +341,7 @@ export default function CostVisualization({
           font: {
             family: "Inter",
             size: 12,
-            weight: "500",
+            weight: 500,
           },
         },
         grid: {
@@ -364,7 +365,7 @@ export default function CostVisualization({
           font: {
             family: "Inter",
             size: 12,
-            weight: "500",
+            weight: 500,
           },
         },
         grid: {
@@ -400,7 +401,7 @@ export default function CostVisualization({
     <div
       className={`transition-colors duration-200 ${
         darkMode ? "bg-gray-800" : "bg-white"
-      } p-6 rounded-xl shadow-soft`}
+      } p-6 rounded-xl shadow-soft mb-8`}
     >
       <h2
         className={`text-lg font-semibold mb-4 ${
@@ -495,7 +496,7 @@ export default function CostVisualization({
       </div>
 
       {/* Show All Models Button */}
-      <div className="mt-4 flex justify-end">
+      <div className="mt-4 flex justify-end pb-2">
         <button
           onClick={() => setShowLimitedModels(!showLimitedModels)}
           className={`text-xs flex items-center px-3 py-1.5 rounded-md ${

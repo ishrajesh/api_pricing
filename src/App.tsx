@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -16,6 +16,13 @@ import CombinedFeatureSection from "./components/CombinedFeatureSection";
 
 const Documentation = lazy(() => import("./components/Documentation"));
 const FAQ = lazy(() => import("./components/FAQ"));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="animate-pulse text-white">Loading...</div>
+  </div>
+);
 
 function Calculator() {
   const [params, setParams] = useState<CalculationParams>({
@@ -59,29 +66,39 @@ function Calculator() {
     switch (activeSection) {
       case "calculator":
         return (
-          <div className="min-h-[calc(100vh-180px)] flex flex-col">
-            <div className="text-center mb-16 pt-8">
-              <h1 className="text-6xl md:text-7xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                LLM API Pricing Calculator
-              </h1>
-              <p className="text-lg md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
-                Calculate and compare the cost of using OpenAI, Anthropic, Groq,
-                and other LLM APIs for your AI project with our simple and
-                powerful calculator.{" "}
-                <span className="text-purple-400">
-                  Latest numbers as of March 2024.
-                </span>
-              </p>
+          <motion.div
+            key="calculator"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="min-h-[calc(100vh-180px)] flex flex-col">
+              <div className="text-center mb-12 pt-8">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  LLM API Pricing Calculator
+                </h1>
+                <p className="text-sm md:text-base text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                  Calculate and compare the cost of using OpenAI, Anthropic,
+                  Groq, and other LLM APIs for your AI project with our simple
+                  and powerful calculator.{" "}
+                  <span className="text-purple-400">
+                    Latest numbers as of March 2024.
+                  </span>
+                </p>
+              </div>
+              <div className="max-w-4xl mx-auto w-full">
+                <CalculatorForm
+                  params={params}
+                  onParamsChange={setParams}
+                  selectedProviders={selectedProviders}
+                  onProvidersChange={setSelectedProviders}
+                  darkMode={theme.darkMode}
+                  onSubmit={handleCalculate}
+                />
+              </div>
             </div>
-            <WizardCalculator
-              params={params}
-              onParamsChange={setParams}
-              selectedProviders={selectedProviders}
-              onProvidersChange={setSelectedProviders}
-              darkMode={theme.darkMode}
-              onSubmit={handleCalculate}
-            />
-          </div>
+          </motion.div>
         );
       case "results":
         const resultsTabs = [
@@ -90,10 +107,19 @@ function Calculator() {
           "Features & Capabilities",
         ];
         return (
-          <div className="space-y-8">
-            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
-              Results & Analysis
-            </h1>
+          <div className="space-y-4 mt-5">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                Results & Analysis
+              </h1>
+              <p
+                className={`text-sm ${
+                  theme.darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
+                Compare costs and features across different AI models
+              </p>
+            </div>
             <TabNavigation
               tabs={resultsTabs}
               activeTab={activeTab}
@@ -135,84 +161,99 @@ function Calculator() {
           </div>
         );
       case "models":
-        const modelTabs = [
-          "Model Comparison",
-          "Feature Matrix",
-          "Cost Breakdown",
-        ];
         return (
-          <div className="space-y-8">
-            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
-              Model Comparison
-            </h1>
-            <TabNavigation
-              tabs={modelTabs}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              darkMode={theme.darkMode}
-            />
-            {activeTab === 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {getAllModels()
-                  .filter((model) => selectedProviders.includes(model.provider))
-                  .map((model) => (
-                    <div
-                      key={model.id}
-                      className={`p-6 rounded-xl ${
-                        theme.darkMode
-                          ? "bg-[#1E1B2E]/80 backdrop-blur-sm border border-purple-500/10"
-                          : "bg-white"
-                      } shadow-lg hover:shadow-xl transition-all duration-300`}
-                    >
-                      <h3
-                        className={`text-xl font-semibold mb-2 ${
-                          theme.darkMode ? "text-white" : "text-gray-900"
-                        }`}
-                      >
-                        {model.name}
-                      </h3>
-                      <p
-                        className={`text-sm mb-4 ${
-                          theme.darkMode ? "text-gray-400" : "text-gray-600"
-                        }`}
-                      >
-                        {model.provider}
-                      </p>
-                      <p
-                        className={`text-sm mb-4 ${
-                          theme.darkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        {model.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {model.features.map((feature) => (
-                          <span
-                            key={feature}
-                            className={`text-xs px-2 py-1 rounded-full ${
-                              theme.darkMode
-                                ? "bg-blue-500/20 text-blue-300"
-                                : "bg-blue-100 text-blue-700"
-                            }`}
-                          >
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+          <motion.div
+            key="models"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="space-y-4 mt-5">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                  Model Comparison
+                </h1>
+                <p
+                  className={`text-sm ${
+                    theme.darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  Compare features and capabilities across different AI models
+                </p>
               </div>
-            )}
-            {activeTab === 1 && (
-              <ModelFeatureMatrix darkMode={theme.darkMode} />
-            )}
-            {activeTab === 2 && <CostBreakdown darkMode={theme.darkMode} />}
-          </div>
+              <div className="mt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {getAllModels()
+                    .filter((model) =>
+                      selectedProviders.includes(model.provider)
+                    )
+                    .map((model) => (
+                      <div
+                        key={model.id}
+                        className={`relative overflow-hidden p-6 rounded-xl ${
+                          theme.darkMode
+                            ? "bg-[#1E1B2E]/80 backdrop-blur-sm border border-purple-500/10 hover:border-purple-500/30"
+                            : "bg-white hover:bg-gray-50"
+                        } shadow-lg hover:shadow-xl transition-all duration-300`}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none" />
+                        <h3
+                          className={`relative text-xl font-semibold mb-3 ${
+                            theme.darkMode ? "text-white" : "text-gray-900"
+                          }`}
+                        >
+                          {model.name}
+                        </h3>
+                        <p
+                          className={`relative text-sm mb-4 ${
+                            theme.darkMode
+                              ? "text-purple-300"
+                              : "text-purple-600"
+                          } font-medium`}
+                        >
+                          {model.provider}
+                        </p>
+                        <p
+                          className={`relative text-sm mb-4 ${
+                            theme.darkMode ? "text-gray-400" : "text-gray-600"
+                          }`}
+                        >
+                          {model.description}
+                        </p>
+                        <div className="relative flex flex-wrap gap-2 mt-4">
+                          {model.features.map((feature) => (
+                            <span
+                              key={feature}
+                              className={`text-xs px-3 py-1 rounded-full ${
+                                theme.darkMode
+                                  ? "bg-purple-500/10 text-purple-300 border border-purple-500/20"
+                                  : "bg-purple-50 text-purple-700 border border-purple-200"
+                              }`}
+                            >
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
         );
       case "docs":
-        return <Documentation darkMode={theme.darkMode} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Documentation darkMode={theme.darkMode} />
+          </Suspense>
+        );
       case "faq":
-        return <FAQ darkMode={theme.darkMode} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <FAQ darkMode={theme.darkMode} />
+          </Suspense>
+        );
       case "settings":
         return (
           <>
@@ -321,20 +362,28 @@ function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#13111C] to-[#1A1825] flex flex-col">
-      {/* Header */}
-      <Header
-        darkMode={theme.darkMode}
-        currentSection={activeSection}
-        onQuickCalculate={handleCalculate}
-        onSectionChange={setActiveSection}
-      />
+    <div className="min-h-screen bg-gradient-to-b from-[#13111C] to-[#1A1825] flex flex-col relative">
+      {/* Background overlay to ensure consistent color */}
+      <div className="absolute inset-0 bg-[#1A1825]/50 pointer-events-none" />
 
-      {/* Main Content Area */}
-      <div className="flex-1 pt-[calc(64px+48px)]">
-        <main className="px-6 sm:px-8 md:px-12 lg:px-16">
-          <div className="max-w-[1920px] mx-auto">{renderContent()}</div>
-        </main>
+      {/* Content */}
+      <div className="relative z-10 flex-1 flex flex-col">
+        {/* Header */}
+        <Header
+          darkMode={theme.darkMode}
+          currentSection={activeSection}
+          onQuickCalculate={handleCalculate}
+          onSectionChange={setActiveSection}
+        />
+
+        {/* Main Content Area */}
+        <div className="flex-1 pt-[calc(64px+48px)] pb-16">
+          <main className="px-6 sm:px-8 md:px-12 lg:px-16">
+            <div className="max-w-[1920px] mx-auto">
+              <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

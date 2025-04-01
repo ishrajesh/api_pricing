@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface FAQItem {
   question: string;
@@ -9,6 +9,27 @@ interface FAQItem {
 
 export default function FAQ({ darkMode }: { darkMode: boolean }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = "LLM API Pricing Calculator - FAQ";
+
+    // Handle initial page load with a slight delay
+    const timer = setTimeout(() => {
+      setIsPageLoaded(true);
+      // Add a small delay before showing content to prevent flash
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 50);
+    }, 50);
+
+    return () => {
+      document.title = originalTitle;
+      clearTimeout(timer);
+    };
+  }, []);
 
   const toggleQuestion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -44,67 +65,88 @@ export default function FAQ({ darkMode }: { darkMode: boolean }) {
   ];
 
   return (
-    <div
-      className={`w-full max-w-7xl mx-auto px-4 py-16 ${
-        darkMode ? "text-white" : "text-gray-900"
-      }`}
-    >
-      <h2
-        className={`text-3xl font-bold mb-8 ${
+    <AnimatePresence mode="wait">
+      <motion.div
+        key="faq"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className={`w-full max-w-7xl mx-auto px-4 py-16 ${
           darkMode ? "text-white" : "text-gray-900"
         }`}
       >
-        Frequently asked questions
-      </h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className={`text-3xl font-bold mb-8 ${
+            darkMode ? "text-white" : "text-gray-900"
+          }`}
+        >
+          Frequently asked questions
+        </motion.h2>
 
-      <div className="space-y-0">
-        {faqItems.map((item, index) => (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isVisible ? 1 : 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="space-y-0"
+        >
+          {faqItems.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: isVisible ? 1 : 0,
+                y: isVisible ? 0 : 20,
+              }}
+              transition={{ duration: 0.3, delay: 0.1 * (index + 1) }}
+              className={`border-t ${
+                darkMode ? "border-gray-700" : "border-gray-200"
+              }`}
+            >
+              <button
+                onClick={() => toggleQuestion(index)}
+                className={`w-full py-6 text-left flex justify-between items-center`}
+              >
+                <span
+                  className={`font-medium text-lg ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {item.question}
+                </span>
+                <ChevronDown
+                  className={`h-5 w-5 ${
+                    openIndex === index ? "rotate-180" : ""
+                  } transition-transform duration-200 ${
+                    darkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                />
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  openIndex === index ? "max-h-96" : "max-h-0"
+                }`}
+              >
+                <p
+                  className={`pb-6 ${
+                    darkMode ? "text-gray-300" : "text-gray-700"
+                  } leading-relaxed`}
+                >
+                  {item.answer}
+                </p>
+              </div>
+            </motion.div>
+          ))}
           <div
-            key={index}
             className={`border-t ${
               darkMode ? "border-gray-700" : "border-gray-200"
             }`}
-          >
-            <button
-              onClick={() => toggleQuestion(index)}
-              className={`w-full py-6 text-left flex justify-between items-center`}
-            >
-              <span
-                className={`font-medium text-lg ${
-                  darkMode ? "text-white" : "text-gray-900"
-                }`}
-              >
-                {item.question}
-              </span>
-              <ChevronDown
-                className={`h-5 w-5 ${
-                  openIndex === index ? "rotate-180" : ""
-                } transition-transform duration-200 ${
-                  darkMode ? "text-gray-400" : "text-gray-600"
-                }`}
-              />
-            </button>
-            <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openIndex === index ? "max-h-96" : "max-h-0"
-              }`}
-            >
-              <p
-                className={`pb-6 ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                } leading-relaxed`}
-              >
-                {item.answer}
-              </p>
-            </div>
-          </div>
-        ))}
-        <div
-          className={`border-t ${
-            darkMode ? "border-gray-700" : "border-gray-200"
-          }`}
-        ></div>
-      </div>
-    </div>
+          ></div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
