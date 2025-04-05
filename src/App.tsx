@@ -66,6 +66,7 @@ function Calculator() {
     switch (activeSection) {
       case "calculator":
         return (
+<<<<<<< HEAD
           <motion.div
             key="calculator"
             initial={{ opacity: 0 }}
@@ -99,6 +100,28 @@ function Calculator() {
               </div>
             </div>
           </motion.div>
+=======
+          <div className="h-[calc(100vh-180px)] flex flex-col">
+            <div className="text-center mb-8 pt-16">
+              <h1 className="text-6xl font-bold mb-6 text-white">
+                LLM API Pricing Calculator
+              </h1>
+              <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                Calculate and compare the cost of using OpenAI, Anthropic, Groq,
+                and other LLM APIs for your AI project with our simple and
+                powerful calculator. Latest numbers as of March 2024.
+              </p>
+            </div>
+            <WizardCalculator
+              params={params}
+              onParamsChange={setParams}
+              selectedProviders={selectedProviders}
+              onProvidersChange={setSelectedProviders}
+              darkMode={theme.darkMode}
+              onSubmit={handleCalculate}
+            />
+          </div>
+>>>>>>> 80200bc (Final Commit)
         );
       case "results":
         const resultsTabs = [
@@ -362,6 +385,7 @@ function Calculator() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gradient-to-b from-[#13111C] to-[#1A1825] flex flex-col relative">
       {/* Background overlay to ensure consistent color */}
       <div className="absolute inset-0 bg-[#1A1825]/50 pointer-events-none" />
@@ -384,6 +408,77 @@ function Calculator() {
             </div>
           </main>
         </div>
+=======
+    <div className="min-h-screen bg-[#13111C] flex flex-col">
+      {/* Header */}
+      <Header
+        darkMode={theme.darkMode}
+        onThemeToggle={handleThemeToggle}
+        currentSection={activeSection}
+        providers={selectedProviders as unknown as string[]}
+        onQuickCalculate={handleCalculate}
+        isSidebarOpen={isSidebarOpen}
+        onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
+
+      {/* Main Content Area with Sidebar */}
+      <div className="flex flex-1 relative">
+        {/* Sidebar - Animate width and position */}
+        <motion.div
+          initial={false}
+          animate={{
+            width: isSidebarOpen ? "256px" : "0px",
+            x: isSidebarOpen ? 0 : -256,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+          className="fixed top-[64px] left-0 h-[calc(100vh-64px)] bg-[#13111C] z-30"
+        >
+          <div
+            className={`h-full overflow-hidden ${
+              isSidebarOpen ? "border-r border-gray-700/50" : ""
+            }`}
+          >
+            <Sidebar
+              darkMode={theme.darkMode}
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
+            />
+          </div>
+        </motion.div>
+
+        {/* Main Content */}
+        <motion.div
+          className="flex-1 min-w-0"
+          animate={{
+            marginLeft: isSidebarOpen ? "256px" : "0px",
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+        >
+          <main className="p-8">
+            <div className="max-w-7xl mx-auto">{renderContent()}</div>
+          </main>
+        </motion.div>
+
+        {/* Overlay when sidebar is open on mobile */}
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/20 z-20 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+>>>>>>> 80200bc (Final Commit)
       </div>
     </div>
   );

@@ -29,6 +29,7 @@ export default function ResultsTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [modelsPerPage, setModelsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
+<<<<<<< HEAD
   const [displayModels, setDisplayModels] = useState<typeof modelsWithCosts>(
     []
   );
@@ -37,6 +38,8 @@ export default function ResultsTable({
   const [hasPendingReorganization, setHasPendingReorganization] =
     useState(false);
   const [isReorganizing, setIsReorganizing] = useState(false);
+=======
+>>>>>>> 80200bc (Final Commit)
 
   // Get models for selected providers
   const models = selectedProviders.flatMap((provider) =>
@@ -279,6 +282,7 @@ export default function ResultsTable({
         darkMode ? "border-gray-700/50" : "border-gray-200"
       } shadow-lg overflow-hidden`}
     >
+<<<<<<< HEAD
       {/* Table Header */}
       <div className="p-6 border-b border-gray-700/50">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -358,6 +362,64 @@ export default function ResultsTable({
               className={`px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
                 darkMode
                   ? "bg-gray-900/50 text-gray-300 hover:bg-gray-700/50 hover:text-white"
+=======
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h2
+            className={`text-lg font-semibold ${
+              darkMode ? "text-white" : "text-gray-900"
+            }`}
+          >
+            Model Cost Comparison
+          </h2>
+          <p
+            className={`text-sm mt-1 ${
+              darkMode ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            Showing {currentModels.length} of {sortedModels.length} models
+          </p>
+        </div>
+        <div className="flex items-center space-x-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by model or provider..."
+              className={`w-64 px-4 py-1.5 pr-8 text-sm rounded-lg transition-colors ${
+                darkMode
+                  ? "bg-gray-700 text-white placeholder-gray-400 border-gray-600 focus:border-purple-500"
+                  : "bg-white text-gray-900 placeholder-gray-500 border-gray-300 focus:border-purple-500"
+              } border focus:outline-none focus:ring-1 focus:ring-purple-500`}
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg
+                className={`w-4 h-4 ${
+                  darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          </div>
+          {/* Select/Deselect Buttons */}
+          <div className="flex space-x-2">
+            <button
+              onClick={handleSelectAll}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg ${
+                darkMode
+                  ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+>>>>>>> 80200bc (Final Commit)
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -365,9 +427,15 @@ export default function ResultsTable({
             </button>
             <button
               onClick={handleDeselectAll}
+<<<<<<< HEAD
               className={`px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
                 darkMode
                   ? "bg-gray-900/50 text-gray-300 hover:bg-gray-700/50 hover:text-white"
+=======
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg ${
+                darkMode
+                  ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+>>>>>>> 80200bc (Final Commit)
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >

@@ -4,7 +4,10 @@
 
 @layer base {
   html {
+<<<<<<< HEAD
     @apply bg-[#1A1825];
+=======
+>>>>>>> 80200bc (Final Commit)
     font-family: "Inter", system-ui, sans-serif;
   }
 

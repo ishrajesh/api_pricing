@@ -19,9 +19,14 @@ import {
   Shield,
   HelpCircle,
   ChevronRight,
+<<<<<<< HEAD
   Menu,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+=======
+} from "lucide-react";
+import { useEffect } from "react";
+>>>>>>> 80200bc (Final Commit)
 
 export default function Documentation() {
   const [isNavOpen, setIsNavOpen] = useState(true);
@@ -36,6 +41,7 @@ export default function Documentation() {
   }, []);
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gradient-to-b from-[#13111C] to-[#1A1825] relative">
       {/* Background overlay for consistency */}
       <div className="absolute inset-0 bg-[#1A1825]/50 pointer-events-none" />
@@ -87,6 +93,49 @@ export default function Documentation() {
               }}
               className="space-y-2"
             >
+=======
+    <div className="min-h-screen bg-background">
+      <main className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <motion.article
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="prose prose-invert max-w-none"
+        >
+          {/* Document Header */}
+          <div className="mb-16 text-center relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent rounded-3xl -z-10" />
+            <h1 className="text-5xl font-bold text-white mb-6 tracking-tight">
+              LLM API Pricing Calculator
+            </h1>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Comprehensive documentation and user guide for estimating and
+              comparing costs across different Large Language Model APIs
+            </p>
+            <div className="mt-8 flex justify-center space-x-4">
+              <div className="flex items-center text-gray-400">
+                <Clock className="h-5 w-5 mr-2" />
+                <span>Last updated: {new Date().toLocaleDateString()}</span>
+              </div>
+              <div className="flex items-center text-gray-400">
+                <Shield className="h-5 w-5 mr-2" />
+                <span>Version 1.0.0</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Table of Contents */}
+          <div className="mb-16 p-8 bg-gray-800/40 rounded-2xl border border-gray-700/50 backdrop-blur-sm">
+            <div className="flex items-center mb-6">
+              <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-xl mr-4">
+                <FileText className="h-6 w-6 text-primary" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">
+                Table of Contents
+              </h2>
+            </div>
+            <nav className="grid grid-cols-1 md:grid-cols-2 gap-4">
+>>>>>>> 80200bc (Final Commit)
               {[
                 { id: "introduction", title: "Introduction", icon: Info },
                 { id: "quick-start", title: "Quick Start Guide", icon: Zap },
@@ -103,6 +152,7 @@ export default function Documentation() {
                 },
                 { id: "technical", title: "Technical Notes", icon: Code2 },
               ].map(({ id, title, icon: Icon }) => (
+<<<<<<< HEAD
                 <motion.a
                   key={id}
                   href={`#${id}`}
@@ -342,11 +392,200 @@ export default function Documentation() {
                             className="flex items-center text-base text-gray-300"
                           >
                             <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mr-3" />
+=======
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  className="flex items-center space-x-3 p-4 rounded-lg bg-gray-800/30 border border-gray-700/50 hover:bg-gray-800/50 transition-colors duration-200"
+                >
+                  <div className="p-2 bg-purple-500/20 rounded-lg">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <span className="text-gray-300 hover:text-white transition-colors duration-200">
+                    {title}
+                  </span>
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-20">
+            {/* Introduction */}
+            <section id="introduction" className="space-y-8">
+              <h2 className="text-3xl font-bold text-white mb-8">
+                1. Introduction
+              </h2>
+              <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50 backdrop-blur-sm">
+                <p className="text-gray-300 leading-relaxed text-lg mb-8">
+                  The LLM API Pricing Calculator is a comprehensive tool
+                  designed to help you estimate and compare costs across
+                  different Large Language Model APIs. This documentation will
+                  guide you through the features, calculation methods, and best
+                  practices for using the calculator effectively.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                    {
+                      icon: DollarSign,
+                      title: "Cost Estimation",
+                      description:
+                        "Accurate cost predictions for your API usage",
+                    },
+                    {
+                      icon: Clock,
+                      title: "Real-time Updates",
+                      description: "Instant calculations and comparisons",
+                    },
+                    {
+                      icon: Shield,
+                      title: "Accurate Data",
+                      description: "Up-to-date pricing from official sources",
+                    },
+                  ].map(({ icon: Icon, title, description }) => (
+                    <div
+                      key={title}
+                      className="flex flex-col items-center text-center p-6 bg-gray-800/40 rounded-xl border border-gray-700/50"
+                    >
+                      <div className="p-3 bg-purple-500/20 rounded-lg mb-4">
+                        <Icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-white mb-2">
+                        {title}
+                      </h3>
+                      <p className="text-gray-400 text-sm">{description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Quick Start Guide */}
+            <section id="quick-start" className="space-y-8">
+              <h2 className="text-3xl font-bold text-white mb-8">
+                2. Quick Start Guide
+              </h2>
+              <div className="space-y-6">
+                {[
+                  {
+                    title: "Select Providers",
+                    description:
+                      "Choose the LLM providers you want to compare (OpenAI, Anthropic, Groq).",
+                    icon: ArrowRight,
+                  },
+                  {
+                    title: "Input Parameters",
+                    description:
+                      "Specify your expected usage: input/output size, number of requests, and timeframe.",
+                    icon: ArrowRight,
+                  },
+                  {
+                    title: "View Results",
+                    description:
+                      "Analyze cost comparisons, visualizations, and optimization recommendations.",
+                    icon: ArrowRight,
+                  },
+                ].map(({ title, description, icon: Icon }) => (
+                  <div
+                    key={title}
+                    className="flex items-start p-6 bg-gray-800/30 rounded-xl border border-gray-700/50 hover:bg-gray-800/40 transition-all duration-200"
+                  >
+                    <div className="flex-shrink-0 p-3 bg-purple-500/20 rounded-lg mr-6">
+                      <Icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        {title}
+                      </h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        {description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Calculation Methodology */}
+            <section id="methodology" className="space-y-8">
+              <h2 className="text-3xl font-bold text-white mb-8">
+                3. Calculation Methodology
+              </h2>
+              <div className="space-y-8">
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-2xl font-semibold text-white mb-6">
+                    Token-Based Calculation
+                  </h3>
+                  <ul className="space-y-4">
+                    {[
+                      "Direct calculation using exact token counts",
+                      "Recommended for production environments",
+                      "Highest accuracy for cost estimation",
+                      "Supports all major tokenizers",
+                      "Real-time token counting",
+                    ].map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center text-gray-300"
+                      >
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mr-3" />
+                        <span className="flex-1">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-2xl font-semibold text-white mb-6">
+                    Word-Based Calculation
+                  </h3>
+                  <ul className="space-y-4">
+                    {[
+                      "Approximation using word-to-token conversion",
+                      "Suitable for quick estimates",
+                      "Uses industry-standard 1.333 tokens per word ratio",
+                      "Easy to understand and use",
+                      "Perfect for initial planning",
+                    ].map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center text-gray-300"
+                      >
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mr-3" />
+                        <span className="flex-1">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-2xl font-semibold text-white mb-6">
+                    Example Calculation
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="text-xl font-medium text-white mb-4">
+                        Input Parameters:
+                      </h4>
+                      <ul className="space-y-4">
+                        {[
+                          "Input Tokens: 100",
+                          "Output Tokens: 500",
+                          "Requests: 1,000",
+                          "Input Rate: $10 per million tokens",
+                          "Output Rate: $30 per million tokens",
+                        ].map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-center text-gray-300"
+                          >
+                            <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mr-3" />
+>>>>>>> 80200bc (Final Commit)
                             <span className="flex-1">{item}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
+<<<<<<< HEAD
 
                     <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/50">
                       <h3 className="text-xl font-semibold text-white mb-3">
@@ -610,11 +849,169 @@ export default function Documentation() {
                         recommend verifying with providers for exact pricing in
                         your region.
                       </p>
+=======
+                    <div>
+                      <h4 className="text-xl font-medium text-white mb-4">
+                        Calculation:
+                      </h4>
+                      <div className="bg-gray-900/70 p-6 rounded-xl font-mono text-sm text-gray-300">
+                        <p className="mb-3">
+                          Input Cost = (100 × 1,000 × $10) ÷ 1,000,000
+                        </p>
+                        <p className="mb-3">= $1.00</p>
+                        <p className="mb-3">
+                          Output Cost = (500 × 1,000 × $30) ÷ 1,000,000
+                        </p>
+                        <p className="mb-3">= $15.00</p>
+                        <p className="font-medium text-primary text-lg">
+                          Total Cost = $1.00 + $15.00 = $16.00
+                        </p>
+                      </div>
+>>>>>>> 80200bc (Final Commit)
                     </div>
                   </div>
                 </motion.section>
               </div>
+<<<<<<< HEAD
             </motion.article>
+=======
+            </section>
+
+            {/* Supported Models */}
+            <section id="models" className="space-y-8">
+              <h2 className="text-3xl font-bold text-white mb-8">
+                4. Supported Models
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                  {
+                    title: "OpenAI Models",
+                    models: ["GPT-4 Turbo", "GPT-3.5 Turbo"],
+                  },
+                  {
+                    title: "Anthropic Models",
+                    models: [
+                      "Claude 3 Opus",
+                      "Claude 3 Sonnet",
+                      "Claude 3 Haiku",
+                    ],
+                  },
+                  {
+                    title: "Groq Models",
+                    models: ["Mixtral 8x7B", "Llama 3 70B", "Llama 3 8B"],
+                  },
+                ].map(({ title, models }) => (
+                  <div
+                    key={title}
+                    className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50"
+                  >
+                    <h3 className="text-xl font-semibold text-white mb-6">
+                      {title}
+                    </h3>
+                    <ul className="space-y-4">
+                      {models.map((model) => (
+                        <li
+                          key={model}
+                          className="flex items-center text-gray-300"
+                        >
+                          <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mr-3" />
+                          <span className="flex-1">{model}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Features & Capabilities */}
+            <section id="features" className="space-y-8">
+              <h2 className="text-3xl font-bold text-white mb-8">
+                5. Features & Capabilities
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-xl font-semibold text-white mb-6">
+                    Advanced Features
+                  </h3>
+                  <ul className="space-y-4">
+                    {[
+                      "Real-time cost calculations",
+                      "Multiple visualization options",
+                      "Model comparison tools",
+                      "Cost optimization recommendations",
+                      "Export functionality",
+                      "Dark/Light mode support",
+                    ].map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center space-x-3 text-gray-300"
+                      >
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-xl font-semibold text-white mb-6">
+                    Getting Started
+                  </h3>
+                  <ul className="space-y-4">
+                    {[
+                      "Select your preferred providers",
+                      "Enter your usage parameters",
+                      "Choose calculation method",
+                      "View detailed cost breakdown",
+                      "Compare different models",
+                      "Export your analysis",
+                    ].map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center space-x-3 text-gray-300"
+                      >
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            {/* Technical Notes */}
+            <section id="technical" className="space-y-8">
+              <h2 className="text-3xl font-bold text-white mb-8">
+                6. Technical Notes
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-xl font-semibold text-white mb-6">
+                    API Integration
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    The calculator uses current pricing data from official API
+                    documentation. Prices are updated regularly to reflect the
+                    latest rates from each provider. All calculations are
+                    performed client-side for privacy and speed.
+                  </p>
+                </div>
+
+                <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50">
+                  <h3 className="text-xl font-semibold text-white mb-6">
+                    Limitations
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    The calculator provides estimates based on average token
+                    counts. Actual costs may vary depending on specific usage
+                    patterns and potential volume discounts. We recommend
+                    verifying with providers for exact pricing in your region.
+                  </p>
+                </div>
+              </div>
+            </section>
+>>>>>>> 80200bc (Final Commit)
           </div>
         </motion.main>
       </div>
